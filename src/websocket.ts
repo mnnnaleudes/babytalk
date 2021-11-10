@@ -45,12 +45,25 @@ io.on("connection", socket => {
             };
 
             users.push(user);
-            io.emit("inbox", user);
+
+            if (user.level === "client") {
+                io.emit("inbox", user);
+            }
 
         }
 
         const messagesRoom = getMessagesRoom(data.room);
-        callback(messagesRoom,users);
+        const clients = users.filter(user => user.level === "client");
+        callback(messagesRoom,clients);
+
+        /*
+
+        Ocultar mensagem ao voltar ao chat
+        criar um array com os atendentes
+        mostrar pop
+
+
+         */
 
     });
 
@@ -69,7 +82,9 @@ io.on("connection", socket => {
 
     });
 
-    socket.on("close_room",(data, callback) => {
+    socket.on("close_room",(data) => {
+
+        socket.leave(data.room);
 
     });
 

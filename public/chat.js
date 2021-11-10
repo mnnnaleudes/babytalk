@@ -114,14 +114,30 @@ function createInbox(data){
 function confirm_close_chat(acao){
 
     if (acao === "close"){
+
+        const message = `O cliente ${username} finalizou o atendimento`;
+
+        const data = {
+            room,
+            username: "alobebe",
+            message
+        }
+
+        socket.emit("message", data);
+
         socket.emit("close_room", {
             room
         });
+    }else{
+        document.getElementById("input_msg").style.visibility="visible";
+        document.getElementById("send_btn").style.visibility="visible";
     }
-
 }
 
 document.getElementById("close_chat").addEventListener("click", (event) => {
+
+    document.getElementById("input_msg").style.visibility="hidden";
+    document.getElementById("send_btn").style.visibility="hidden";
 
     const message = `Deseja realmente finalizar o atendimento?
         <span onclick="confirm_close_chat('close')" class='confirm_close_chat'>Sim</span> |
@@ -129,7 +145,7 @@ document.getElementById("close_chat").addEventListener("click", (event) => {
 
     const data = {
         room,
-        username,
+        username: "alobebe",
         message
     }
 
