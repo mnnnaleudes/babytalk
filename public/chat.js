@@ -129,12 +129,20 @@ function confirm_close_chat(acao){
             room
         });
     }else{
+
         document.getElementById("input_msg").style.visibility="visible";
         document.getElementById("send_btn").style.visibility="visible";
+
+        const lastMessage = document.getElementById("input_msg").lastChild;
+
+        console.log(lastMessage);
+
+        //lastMessage.remove();
+
     }
 }
 
-document.getElementById("close_chat").addEventListener("click", (event) => {
+    document.getElementById("close_chat").addEventListener("click", (event) => {
 
     document.getElementById("input_msg").style.visibility="hidden";
     document.getElementById("send_btn").style.visibility="hidden";

@@ -67,6 +67,22 @@ img{ max-width:100%;}
 }
 .inbox_chat { height: 550px; overflow-y: scroll;}
 
+.inbox_message { height: 110px; overflow-y: scroll;}
+
+.inbox_message .chat_ib h5{ font-size:15px; color:#464646; margin:6px 0 8px 0;}
+.inbox_message .chat_ib h5 span{ font-size:13px; float:left; margin-left: 170px}
+.inbox_message .chat_ib h5 span:first-child{ margin-left: 0px;}
+.inbox_message .chat_ib p{ font-size:14px; color:#989898; margin:auto}
+.inbox_message .chat_img {
+    float: left;
+    width: 11%;
+}
+.inbox_message .chat_ib {
+    float: left;
+    padding: 0 0 0 15px;
+    width: 88%;
+}
+
 .active_chat{ background:#ebebeb;}
 
 .incoming_msg_img {

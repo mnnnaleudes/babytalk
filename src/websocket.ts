@@ -48,12 +48,14 @@ io.on("connection", socket => {
 
             if (user.level === "client") {
                 io.emit("inbox", user);
+                io.emit("newchat", user);
             }
 
         }
 
         const messagesRoom = getMessagesRoom(data.room);
         const clients = users.filter(user => user.level === "client");
+
         callback(messagesRoom,clients);
 
         /*
@@ -61,7 +63,6 @@ io.on("connection", socket => {
         Ocultar mensagem ao voltar ao chat
         criar um array com os atendentes
         mostrar pop
-
 
          */
 
