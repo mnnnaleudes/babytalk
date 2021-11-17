@@ -7,30 +7,39 @@ const level = urlSearch.get("level");
 const email = urlSearch.get("email");
 const assunto = urlSearch.get("assunto");
 
-// create a JSON object
-const json = {
-    client_name: username,
-    client_email: email,
-    subject: assunto,
-    status: 1
-};
+/*
 
-// request options
-const options = {
-    method: 'POST',
-    body: JSON.stringify(json),
-    headers: {
-        'Content-Type': 'application/json'
+Criar metodos para abertura de salas (desenhar)
+
+ */
+
+if(level == 'client') {
+    // create a JSON object
+    const json = {
+        client_name: username,
+        client_email: email,
+        subject: assunto,
+        status: 1
+    };
+
+    // request options
+    const options = {
+        method: 'POST',
+        body: JSON.stringify(json),
+        headers: {
+            'Content-Type': 'application/json'
+        }
     }
-}
 
-// send post request
-fetch('http://localhost:3000/room', options)
-    .then(res => res.text())
-    .then(data => {
-        room = data._id;
-    })
-    .catch(err => console.error(err));
+    // send post request
+    fetch('http://localhost:3000/room', options)
+        .then(res => res.text())
+        .then(data => {
+            room = data._id;
+        })
+        .catch(err => console.error(err));
+
+}
 
 socket.emit("open_room", {
     username,
@@ -68,6 +77,12 @@ socket.on("message", (data) => {
 });
 
 socket.on("inbox", (data) => {
+
+    createInbox(data);
+
+});
+
+socket.on("answer", (data) => {
 
     createInbox(data);
 

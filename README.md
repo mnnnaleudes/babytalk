@@ -1,3 +1,5 @@
+run yarn dev
+
 Home atendimento\
 localhost:3000/index.html
 
