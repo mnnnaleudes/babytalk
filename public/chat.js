@@ -8,49 +8,14 @@ const email = urlSearch.get("email");
 const assunto = urlSearch.get("assunto");
 
 /*
-
-Criar metodos para abertura de salas (desenhar)
-
+Criar cliente
  */
-
 if(level == 'client') {
-    // create a JSON object
-    const json = {
-        client_name: username,
-        client_email: email,
-        subject: assunto,
-        status: 1
-    };
 
-    // request options
-    const options = {
-        method: 'POST',
-        body: JSON.stringify(json),
-        headers: {
-            'Content-Type': 'application/json'
-        }
-    }
-
-    // send post request
-    fetch('http://localhost:3000/room', options)
-        .then(res => res.text())
-        .then(data => {
-            room = data._id;
-        })
-        .catch(err => console.error(err));
+    createClient(username, level, email, assunto)
 
 }
 
-socket.emit("open_room", {
-    username,
-    room,
-    level,
-    email,
-    assunto
-}, (messages, clients) => {
-    messages.forEach((message) => createMessage(message));
-    clients.forEach((client) => createInbox(client));
-});
 
 document.getElementById("input_msg").addEventListener("keypress", (event) => {
 
@@ -87,6 +52,44 @@ socket.on("answer", (data) => {
     createInbox(data);
 
 });
+
+function createClient(username, level, email, assunto){
+    // create a JSON object
+    const json = {
+        client_name: username,
+        client_email: email,
+        subject: assunto,
+        status: 1
+    };
+
+    // request options
+    const options = {
+        method: 'POST',
+        body: JSON.stringify(json),
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    }
+
+    // send post request
+    fetch('http://localhost:3000/room', options)
+        .then(res => res.text())
+        .then(data => {
+            room = data._id;
+        })
+        .catch(err => console.error(err));
+
+    socket.emit("open_room", {
+        username,
+        room,
+        level,
+        email,
+        assunto
+    }, (messages, clients) => {
+        messages.forEach((message) => createMessage(message));
+        clients.forEach((client) => createInbox(client));
+    });
+}
 
 function createMessage(data){
 
