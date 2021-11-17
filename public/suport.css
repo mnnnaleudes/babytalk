@@ -218,3 +218,57 @@ img{ max-width:100%;}
     text-decoration: underline;
     color: limegreen;
 }
+
+.notification {
+    background-color: lightgoldenrodyellow;
+    width: 350px;
+    height: 180px;
+    position: absolute;
+    bottom: 0;
+    right: 15px;
+    border: 1px solid darkorange;
+    border-radius: 10px 10px 0 0;
+}
+
+.notification h2 {
+    font-size: 15px;
+    font-weight: bold;
+    margin: 5px auto;
+    width: 250px;
+    color: crimson;
+}
+
+.notification h5 {
+    font-size: 13px;
+    margin-left: 10px;
+    color: crimson;
+    margin-top: 20px;
+}
+
+.notification h5 span {
+    display: block;
+    margin-top: 5px;
+}
+
+.notification .options {
+    text-align: center;
+    margin-top: 15px;
+}
+
+.notification .options button {
+    border-radius: 20px;
+    font-size: 10px;
+    font-weight: bold;
+    width: 75px;
+    height: 30px;
+}
+
+.notification .options button.agree {
+    background-color: green;
+    color: white;
+}
+
+.notification .options button.deny {
+    background-color: red;
+    color: white;
+}

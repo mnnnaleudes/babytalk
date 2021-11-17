@@ -2,10 +2,35 @@ const socket = io();
 
 const urlSearch = new URLSearchParams(window.location.search);
 const username = urlSearch.get("username");
-const room = urlSearch.get("select_room");
+let room = "";
 const level = urlSearch.get("level");
 const email = urlSearch.get("email");
 const assunto = urlSearch.get("assunto");
+
+// create a JSON object
+const json = {
+    client_name: username,
+    client_email: email,
+    subject: assunto,
+    status: 1
+};
+
+// request options
+const options = {
+    method: 'POST',
+    body: JSON.stringify(json),
+    headers: {
+        'Content-Type': 'application/json'
+    }
+}
+
+// send post request
+fetch('http://localhost:3000/room', options)
+    .then(res => res.text())
+    .then(data => {
+        room = data._id;
+    })
+    .catch(err => console.error(err));
 
 socket.emit("open_room", {
     username,
@@ -83,8 +108,6 @@ function createMessage(data){
 
 function createInbox(data){
 
-    console.log(data);
-
     const inbox = document.getElementById("inbox_msg");
 
     if(inbox !== null) {
@@ -142,7 +165,7 @@ function confirm_close_chat(acao){
     }
 }
 
-    document.getElementById("close_chat").addEventListener("click", (event) => {
+document.getElementById("close_chat").addEventListener("click", (event) => {
 
     document.getElementById("input_msg").style.visibility="hidden";
     document.getElementById("send_btn").style.visibility="hidden";
