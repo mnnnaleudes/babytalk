@@ -2,7 +2,7 @@ const socket = io();
 
 const urlSearch = new URLSearchParams(window.location.search);
 const username = urlSearch.get("username");
-let room = "";
+let room = urlSearch.get("select_room");
 const level = urlSearch.get("level");
 const email = urlSearch.get("email");
 const assunto = urlSearch.get("assunto");
@@ -13,6 +13,10 @@ Criar cliente
 if(level == 'client') {
 
     createClient(username, level, email, assunto)
+
+}else{
+
+    createSuport(username, email, room)
 
 }
 
@@ -75,7 +79,51 @@ function createClient(username, level, email, assunto){
     fetch('http://localhost:3000/room', options)
         .then(res => res.text())
         .then(data => {
-            room = data._id;
+
+            let client = JSON.parse(data);
+
+            let room = client._id;
+
+            socket.emit("open_room", {
+                username,
+                room,
+                level,
+                email,
+                assunto
+            }, (messages, clients) => {
+                messages.forEach((message) => createMessage(message));
+                clients.forEach((client) => createInbox(client));
+            });
+
+        })
+        .catch(err => console.error(err));
+
+
+}
+
+function createSuport(username, email, room){
+    // create a JSON object
+    const json = {
+        id: room,
+        suport_name: username,
+        suport_email: email,
+        status: 3
+    };
+
+    // request options
+    const options = {
+        method: 'PUT',
+        body: JSON.stringify(json),
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    }
+
+    // send post request
+    fetch('http://localhost:3000/room', options)
+        .then(res => res.text())
+        .then(data => {
+            console.log(data)
         })
         .catch(err => console.error(err));
 

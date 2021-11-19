@@ -20,6 +20,10 @@ status:
 
 routes.post('/room', Room.store);
 
+routes.put('/room', Room.update);
+
+routes.get('/room', Room.list);
+
 /*
 end room routes
  */

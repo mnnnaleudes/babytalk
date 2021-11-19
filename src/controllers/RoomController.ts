@@ -10,8 +10,6 @@ class RoomController {
      */
     async store(req: Request, res: Response) {
 
-        console.log(process.env.MONGO_URL)
-
         if (!process.env.MONGO_URL) {
             throw new Error('MongoDB server not initialized');
         }
@@ -32,6 +30,14 @@ class RoomController {
     update room
      */
     async update(req: Request, res: Response) {
+
+        if (!process.env.MONGO_URL) {
+            throw new Error('MongoDB server not initialized');
+        }
+
+        await mongoose.connect(process.env.MONGO_URL, {
+            autoIndex: true
+        });
 
         //when undefined id
         if(req.body.id === undefined){
@@ -65,7 +71,36 @@ class RoomController {
 
         const updatedRoom = await Room.updateOne(query,set);
 
+        await mongoose.connection.close();
+
         return res.status(200).send(updatedRoom);
+
+    }
+
+    async list(req: Request, res: Response) {
+
+        if (!process.env.MONGO_URL) {
+            throw new Error('MongoDB server not initialized');
+        }
+
+        await mongoose.connect(process.env.MONGO_URL, {
+            autoIndex: true
+        });
+
+        const query:any = {};
+
+        //when get status property
+        if(req.query.status !== undefined){
+
+            query.status = req.query.status;
+
+        }
+
+        const createdRoom = await Room.find(query);
+
+        await mongoose.connection.close();
+
+        return res.send(createdRoom);
 
     }
 

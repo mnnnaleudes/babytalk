@@ -1,3 +1,35 @@
+const statusChat = {
+    1:"online",
+    2:"offline",
+    3:"andamento",
+    4:"finalizado"
+};
+
+// request options
+const options = {
+    method: 'GET',
+    headers: {
+        'Content-Type': 'application/json'
+    }
+}
+
+// send post request
+fetch('http://localhost:3000/room', options)
+    .then(res => res.text())
+    .then(data => {
+
+        let messages = JSON.parse(data);
+
+        for(let i=0; i<messages.length; i++){
+
+            createChat(messages[i]);
+
+        }
+
+    })
+    .catch(err => console.error(err));
+
+
 const socket = io();
 
 socket.on("newchat", (data) => {
@@ -8,7 +40,24 @@ socket.on("newchat", (data) => {
 
 function createChat(data){
 
-    const inbox = document.getElementById("chat_online");
+    //remover uso da username...
+    if(data.client_name !== undefined){
+        data.username = data.client_name;
+    }
+
+    if(data.client_email !== undefined){
+        data.email = data.client_email;
+    }
+
+    if(data.subject !== undefined){
+        data.assunto = data.subject;
+    }
+
+    if(data._id !== undefined){
+        data.room = data._id;
+    }
+
+    const inbox = document.getElementById("chat_"+statusChat[data.status]);
 
     if(inbox !== null) {
 
@@ -53,8 +102,6 @@ document.getElementById("deny_chat").addEventListener("click", (event) => {
 
     let notifications = document.getElementById("notifications").getElementsByTagName("div");
     let len = notifications.length;
-
-    console.log(len)
 
     for (let i = 0; i < len; i++) {
         if (notifications[i].className.toLowerCase() == "notification") {
