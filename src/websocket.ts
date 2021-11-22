@@ -24,8 +24,6 @@ io.on("connection", socket => {
 
     socket.on("open_room",(data, callback) => {
 
-        console.log(data);
-
         socket.join(data.room);
 
         const userInRoom = users.find(user => user.username === data.username && user.room === data.room);

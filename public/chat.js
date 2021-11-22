@@ -204,7 +204,30 @@ function confirm_close_chat(acao){
 
     if (acao === "close"){
 
-        const message = `O cliente ${username} finalizou o atendimento`;
+        // create a JSON object
+        const json = {
+            id: room,
+            status: 4
+        };
+
+        // request options
+        const options = {
+            method: 'PUT',
+            body: JSON.stringify(json),
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        }
+
+        // send post request
+        fetch('http://localhost:3000/room', options)
+            .then(res => res.text())
+            .then(data => {
+                console.log(data)
+            })
+            .catch(err => console.error(err));
+
+        const message = `${username} finalizou o atendimento`;
 
         const data = {
             room,
