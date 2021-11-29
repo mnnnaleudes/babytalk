@@ -285,3 +285,7 @@ img{ max-width:100%;}
     background-color: red;
     color: white;
 }
+
+.hide{
+    display: none;
+}

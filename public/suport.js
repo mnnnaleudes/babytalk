@@ -34,6 +34,7 @@ const socket = io();
 
 socket.on("newchat", (data) => {
 
+    console.log("hey there!");
     createChat(data);
 
 });
@@ -57,6 +58,10 @@ function createChat(data){
         data.room = data._id;
     }
 
+    if(data.status === undefined) {
+        data.status = 1;
+    }
+
     const inbox = document.getElementById("chat_"+statusChat[data.status]);
 
     if(inbox !== null) {
@@ -74,31 +79,35 @@ function createChat(data){
         inbox.scrollTop = 0;
     }
 
+    if(data.status == 1) {
 
-    const notifications = document.getElementById("notifications");
+        const notifications = document.getElementById("notifications");
 
-    if(notifications !== null) {
+        if (notifications !== null) {
 
-        notifications.innerHTML += `
+            notifications.innerHTML += `
 
-        <div class="notification">
-            <h2>UM CLIENTE FEZ UMA PERGUNTA</h2>
-            <h5>
-                <span>${dayjs(data.createdAt).format("DD/MM - HH:mm")}</span>
-                <span>${data.username}</span>
-                <span>${data.email}</span>
-                <span>${data.assunto}</span>
-            </h5>
-            <div class="options">
-                <button class="agree" onclick="window.open('http://localhost:3000/support.html?username=Robs&select_room=${data.room}&level=suport&email=rob@alobebe.com.br','_self')">ATENDER</button>
-                <button id="deny_chat" class="deny">FECHAR</button>
-            </div>
-        </div>`;
+            <div class="notification">
+                <h2>UM CLIENTE FEZ UMA PERGUNTA</h2>
+                <h5>
+                    <span>${dayjs(data.createdAt).format("DD/MM - HH:mm")}</span>
+                    <span>${data.username}</span>
+                    <span>${data.email}</span>
+                    <span>${data.assunto}</span>
+                </h5>
+                <div class="options">
+                    <button class="agree" onclick="window.open('http://localhost:3000/support.html?username=Robs&select_room=${data.room}&level=suport&email=rob@alobebe.com.br','_self')">ATENDER</button>
+                    <button onclick="deny_chat()" class="deny">FECHAR</button>
+                </div>
+            </div>`;
+
+
+        }
     }
 
 }
 
-document.getElementById("deny_chat").addEventListener("click", (event) => {
+function deny_chat (){
 
     let notifications = document.getElementById("notifications").getElementsByTagName("div");
     let len = notifications.length;
@@ -109,4 +118,4 @@ document.getElementById("deny_chat").addEventListener("click", (event) => {
         }
     }
 
-});
+}

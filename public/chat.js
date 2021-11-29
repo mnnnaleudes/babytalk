@@ -12,7 +12,24 @@ Criar cliente
  */
 if(level == 'client') {
 
-    createClient(username, level, email, assunto)
+    if(document.getElementById("room").value === "" || document.getElementById("room").value === undefined){
+        createClient(username, level, email, assunto)
+    }else{
+
+        let room = document.getElementById("room").value;
+
+        socket.emit("open_room", {
+            username,
+            room,
+            level,
+            email,
+            assunto
+        }, (messages, clients) => {
+            messages.forEach((message) => createMessage(message));
+            clients.forEach((client) => createInbox(client));
+        });
+
+    }
 
 }else{
 
@@ -28,9 +45,14 @@ document.getElementById("input_msg").addEventListener("keypress", (event) => {
         const message = event.target.value;
         event.target.value = "";
 
+        let room = document.getElementById("room").value;
+
+        console.log(room);
+
         const data = {
             room,
             username,
+            level,
             message
         }
 
@@ -84,6 +106,8 @@ function createClient(username, level, email, assunto){
 
             let room = client._id;
 
+            document.getElementById("room").value = room;
+
             socket.emit("open_room", {
                 username,
                 room,
@@ -119,6 +143,8 @@ function createSuport(username, email, room){
         }
     }
 
+    document.getElementById("room").value = room;
+
     // send post request
     fetch('http://localhost:3000/room', options)
         .then(res => res.text())
@@ -146,6 +172,7 @@ function createMessage(data){
     const messageBox = document.getElementById("box_msg");
 
     if(myUser){
+
         messageBox.innerHTML +=`
             <div class="outgoing_msg">
                 <div class="sent_msg">
@@ -154,8 +181,15 @@ function createMessage(data){
                 </div>
             </div>`;
     }else{
+
+        let hide = false;
+
+        if(data.text.search("confirm_close_chat") > -1 && level != data.level){
+            hide = true;
+        }
+
         messageBox.innerHTML +=`
-            <div class="incoming_msg">
+            <div class="incoming_msg ${(hide)?'hide':''}" >
                 <div class="incoming_msg_img"> <img src="https://ptetutorials.com/images/user-profile.png" alt="sunil"> </div>
                 <div class="received_msg">
                     <div class="received_withd_msg">
@@ -203,6 +237,8 @@ function createInbox(data){
 function confirm_close_chat(acao){
 
     if (acao === "close"){
+
+        let room = document.getElementById("room").value;
 
         // create a JSON object
         const json = {
@@ -263,9 +299,12 @@ document.getElementById("close_chat").addEventListener("click", (event) => {
         <span onclick="confirm_close_chat('close')" class='confirm_close_chat'>Sim</span> |
         <span onclick="confirm_close_chat('back')" class='confirm_close_chat'>Voltar</span>`;
 
+    let room = document.getElementById("room").value;
+
     const data = {
         room,
         username: "alobebe",
+        level,
         message
     }
 

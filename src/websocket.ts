@@ -14,6 +14,7 @@ interface Message {
     text: string,
     username: string,
     room: string,
+    level: string,
     createdAt: Date
 };
 
@@ -76,6 +77,7 @@ io.on("connection", socket => {
             room: data.room,
             username: data.username,
             text: data.message,
+            level: data.level,
             createdAt: new Date()
         };
 
