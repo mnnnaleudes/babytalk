@@ -16,7 +16,7 @@ class SupportController {
         }
 
         await mongoose.connect(process.env.MONGO_URL, {
-            autoIndex: true
+            autoIndex: true,
         });
 
         //when undefined id
@@ -56,7 +56,7 @@ class SupportController {
         }
 
         await mongoose.connect(process.env.MONGO_URL, {
-            autoIndex: true
+            autoIndex: true,
         });
 
         const query:any = {};

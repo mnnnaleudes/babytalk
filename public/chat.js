@@ -111,7 +111,42 @@ socket.on("answer", (data) => {
 
 });
 
+
+socket.on("support_offline", (status) => {
+
+    if (status == 'offline'){
+        createChatbot('offline');
+    }else{
+        console.log("ok");
+    }
+
+});
+
+
 function createClient(username, level, email, assunto){
+
+    let supports = "";
+
+    //verifica se ha atendentes online
+
+    // request options
+    const options_support = {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    }
+
+    // send request
+    fetch('http://localhost:3001/support?status=online', options_support)
+        .then(res => res.text())
+        .then(data => {
+            let _supports = JSON.parse(data);
+            supports = _supports.length;
+        })
+        .catch(err => console.error(err));
+
+
     // create a JSON object
     const json = {
         client_name: username,
@@ -145,7 +180,8 @@ function createClient(username, level, email, assunto){
                 room,
                 level,
                 email,
-                assunto
+                assunto,
+                supports
             }, (messages, clients) => {
                 messages.forEach((message) => createMessage(message));
                 clients.forEach((client) => createInbox(client));
@@ -347,3 +383,32 @@ document.getElementById("close_chat").addEventListener("click", (event) => {
     socket.emit("message", data);
 
 });
+
+//Chatbot
+function createChatbot(status){
+
+    let message = "";
+
+    if(status == 'offline') {
+        message = `
+        Olá ${username}, tudo bem?
+    
+        Esta ferramenta funciona de
+        segunda à sexta-feira das 9h às
+        17h30.
+        
+        Envie sua mensagem. Nossa equipe
+        responderá no próximo dia útil.
+        
+        Para iniciar o atendimento, informe  o motivo de seu contato:`;
+    }
+
+    const data = {
+        room,
+        username: "alobebe",
+        message
+    }
+
+    socket.emit("message", data);
+
+}

@@ -64,6 +64,13 @@ io.on("connection", socket => {
         }
 
         const messagesRoom = getMessagesRoom(data.room);
+
+        if(messagesRoom.length == 0){
+            if(data.supports == 0){
+                io.emit("support_message", "offline");
+            }
+        }
+
         const clients = users.filter(user => user.level === "client");
 
         callback(messagesRoom,clients);
@@ -116,5 +123,6 @@ io.on("connection", socket => {
 
 function getMessagesRoom(room: string) {
     const messagesRoom = messages.filter(message => message.room === room);
+
     return messagesRoom;
 }
