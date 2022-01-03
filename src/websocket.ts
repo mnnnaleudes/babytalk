@@ -18,8 +18,15 @@ interface Message {
     createdAt: Date
 };
 
+interface Support {
+    name: string,
+    email: string,
+    status: string
+}
+
 const users: RoomUser[] = [];
 const messages: Message[] = [];
+const supports: Support[] = [];
 
 io.on("connection", socket => {
 
@@ -90,6 +97,18 @@ io.on("connection", socket => {
     socket.on("close_room",(data) => {
 
         socket.leave(data.room);
+
+    });
+
+    socket.on("open_support", (data) => {
+
+        const support: Support = {
+            name: data.name,
+            email: data.email,
+            status: data.status
+        };
+
+        supports.push(support);
 
     });
 
