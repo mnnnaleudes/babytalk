@@ -12,6 +12,27 @@ Criar cliente
  */
 if(level == 'client') {
 
+    let supports = "";
+
+    //verifica se ha atendentes online
+
+    // request options
+    const options_support = {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    }
+
+    // send request
+    fetch('http://localhost:3001/support?status=online', options_support)
+        .then(res => res.text())
+        .then(data => {
+            let _supports = JSON.parse(data);
+            supports = _supports.length;
+        })
+        .catch(err => console.error(err));
+
     if(document.getElementById("room").value === "" || document.getElementById("room").value === undefined){
         createClient(username, level, email, assunto)
     }else{
@@ -23,7 +44,8 @@ if(level == 'client') {
             room,
             level,
             email,
-            assunto
+            assunto,
+            supports
         }, (messages, clients) => {
             messages.forEach((message) => createMessage(message));
             clients.forEach((client) => createInbox(client));
@@ -112,12 +134,12 @@ socket.on("answer", (data) => {
 });
 
 
-socket.on("support_offline", (status) => {
+socket.on("support_message", (status) => {
 
     if (status == 'offline'){
         createChatbot('offline');
     }else{
-        console.log("ok");
+        createChatbot('online');
     }
 
 });
@@ -401,6 +423,13 @@ function createChatbot(status){
         responderá no próximo dia útil.
         
         Para iniciar o atendimento, informe  o motivo de seu contato:`;
+    }else{
+        message = `
+        Olá ${username}, tudo bem?
+            Fale com um atendente via chat.
+            Esta ferramenta funciona de
+        segunda à sexta-feira das 9h às
+        17h30.`;
     }
 
     const data = {
@@ -408,6 +437,8 @@ function createChatbot(status){
         username: "alobebe",
         message
     }
+
+    console.log(data);
 
     socket.emit("message", data);
 

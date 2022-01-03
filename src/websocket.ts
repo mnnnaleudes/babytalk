@@ -65,9 +65,12 @@ io.on("connection", socket => {
 
         const messagesRoom = getMessagesRoom(data.room);
 
-        if(messagesRoom.length == 0){
-            if(data.supports == 0){
+        if(messagesRoom.length === 0){
+
+            if(data.supports === 0){
                 io.emit("support_message", "offline");
+            }else{
+                io.emit("support_message", "online");
             }
         }
 

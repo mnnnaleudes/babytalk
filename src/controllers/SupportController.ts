@@ -70,7 +70,7 @@ class SupportController {
 
         const createdSupport = await Support.find(query);
 
-        await mongoose.connection.close();
+        //await mongoose.connection.close();
 
         return res.send(createdSupport);
 
