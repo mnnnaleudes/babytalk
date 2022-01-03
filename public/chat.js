@@ -136,7 +136,7 @@ socket.on("answer", (data) => {
 
 socket.on("support_message", (status) => {
 
-    if (status == 'offline'){
+    if (status === 'offline'){
         createChatbot('offline');
     }else{
         createChatbot('online');
@@ -413,32 +413,33 @@ function createChatbot(status){
 
     if(status == 'offline') {
         message = `
-        Olá ${username}, tudo bem?
+        Olá ${username}, tudo bem?<br/>
     
         Esta ferramenta funciona de
         segunda à sexta-feira das 9h às
-        17h30.
+        17h30.<br/>
         
         Envie sua mensagem. Nossa equipe
-        responderá no próximo dia útil.
+        responderá no próximo dia útil.<br/>
         
         Para iniciar o atendimento, informe  o motivo de seu contato:`;
     }else{
         message = `
-        Olá ${username}, tudo bem?
-            Fale com um atendente via chat.
+        Olá ${username}, tudo bem?<br/>
+            Fale com um atendente via chat.<br/>
             Esta ferramenta funciona de
         segunda à sexta-feira das 9h às
         17h30.`;
     }
 
+    let room = document.getElementById("room").value;
+
     const data = {
         room,
         username: "alobebe",
+        level,
         message
     }
-
-    console.log(data);
 
     socket.emit("message", data);
 
