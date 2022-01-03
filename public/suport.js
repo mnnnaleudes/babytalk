@@ -14,7 +14,7 @@ const options = {
 }
 
 // send post request
-fetch('http://localhost:3000/room', options)
+fetch('http://localhost:3001/room', options)
     .then(res => res.text())
     .then(data => {
 
@@ -67,7 +67,7 @@ function createChat(data){
     if(inbox !== null) {
 
         inbox.innerHTML += `
-        <div class="chat_ib" onclick="window.open('http://localhost:3000/support.html?username=Robs&select_room=${data.room}&level=suport&email=rob@alobebe.com.br','_self')">
+        <div class="chat_ib" onclick="window.open('http://localhost:3001/support.html?username=Robs&select_room=${data.room}&level=suport&email=rob@alobebe.com.br','_self')">
             <h5>
                 <span>${dayjs(data.createdAt).format("DD/MM - HH:mm")}</span>
                 <span>${data.username}</span>
@@ -96,7 +96,7 @@ function createChat(data){
                     <span>${data.assunto}</span>
                 </h5>
                 <div class="options">
-                    <button class="agree" onclick="window.open('http://localhost:3000/support.html?username=Robs&select_room=${data.room}&level=suport&email=rob@alobebe.com.br','_self')">ATENDER</button>
+                    <button class="agree" onclick="window.open('http://localhost:3001/support.html?username=Robs&select_room=${data.room}&level=suport&email=rob@alobebe.com.br','_self')">ATENDER</button>
                     <button onclick="deny_chat()" class="deny">FECHAR</button>
                 </div>
             </div>`;

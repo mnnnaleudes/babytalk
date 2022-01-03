@@ -98,7 +98,7 @@ function createClient(username, level, email, assunto){
     }
 
     // send post request
-    fetch('http://localhost:3000/room', options)
+    fetch('http://localhost:3001/room', options)
         .then(res => res.text())
         .then(data => {
 
@@ -120,7 +120,11 @@ function createClient(username, level, email, assunto){
             });
 
         })
-        .catch(err => console.error(err));
+        .catch(
+            err => {
+                //console.log(err)
+            }
+        );
 
 
 }
@@ -146,7 +150,7 @@ function createSuport(username, email, room){
     document.getElementById("room").value = room;
 
     // send post request
-    fetch('http://localhost:3000/room', options)
+    fetch('http://localhost:3001/room', options)
         .then(res => res.text())
         .then(data => {
             console.log(data)
@@ -214,7 +218,7 @@ function createInbox(data){
 
         inbox.innerHTML += `
         <div class="chat_list">
-            <div class="chat_people" onclick="window.open('http://localhost:3000/support.html?username=Robs&select_room=${data.room}&level=suport&email=rob@alobebe.com.br','_self')">
+            <div class="chat_people" onclick="window.open('http://localhost:3001/support.html?username=Robs&select_room=${data.room}&level=suport&email=rob@alobebe.com.br','_self')">
                 <div class="chat_img"> <img src="https://ptetutorials.com/images/user-profile.png" alt="sunil"> </div>
                 <div class="chat_ib">
                     <span class="time_date">${dayjs(data.createdAt).format("DD/MM - HH:mm")}</span>
@@ -256,7 +260,7 @@ function confirm_close_chat(acao){
         }
 
         // send post request
-        fetch('http://localhost:3000/room', options)
+        fetch('http://localhost:3001/room', options)
             .then(res => res.text())
             .then(data => {
                 console.log(data)
