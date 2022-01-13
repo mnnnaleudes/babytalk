@@ -83,6 +83,8 @@ if(level == 'client') {
         })
         .catch(err => console.error(err));
 
+    console.log(status);
+
     socket.emit("open_support", {
         username,
         email,
@@ -328,6 +330,35 @@ function createInbox(data){
 
 }
 
+function callanswer(subject,order){
+
+    // request options
+    const options = {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    }
+
+    // send request
+    fetch('http://localhost:3001/botmessage?id_option='+option+'&order='+order, options)
+        .then(res => res.text())
+        .then(data => {
+            let _supports = JSON.parse(data);
+            supports = _supports.length;
+        })
+        .catch(err => console.error(err));
+
+}
+
+function chooseSubject(subject){
+
+    let order = 0;
+
+    callanswer(subject,order);
+
+}
+
 function confirm_close_chat(acao){
 
     if (acao === "close"){
@@ -349,7 +380,7 @@ function confirm_close_chat(acao){
             }
         }
 
-        // send post request
+        // send put request
         fetch('http://localhost:3001/room', options)
             .then(res => res.text())
             .then(data => {
@@ -409,12 +440,12 @@ document.getElementById("close_chat").addEventListener("click", (event) => {
 //Chatbot
 function createChatbot(status){
 
-    let message = "";
+    let room = document.getElementById("room").value;
 
     if(status == 'offline') {
-        message = `
+        let message_off = `
         Olá ${username}, tudo bem?<br/>
-    
+        
         Esta ferramenta funciona de
         segunda à sexta-feira das 9h às
         17h30.<br/>
@@ -423,24 +454,51 @@ function createChatbot(status){
         responderá no próximo dia útil.<br/>
         
         Para iniciar o atendimento, informe  o motivo de seu contato:`;
+
+        let data = {
+            room,
+            username: "alobebe",
+            level,
+            message: message_off
+        }
+
+        socket.emit("message", data);
+
+        let message_options = `<select id="botsubject" name="subject" onchange="chooseSubject(this.value)">
+            <option value="1">Conversar sobre um produto</option>
+            <option value="2">Conversar sobre uma compra realizada no site</option>
+            <option value="3">Lista de chá de bebê</option>
+            <option value="4">Programa Alô Bebê Club</option>
+            <option value="5">Programa Alô Bebê Twins</option>
+            <option value="6">Dificuldade para navegar no site ou comprar</option>
+            <option value="7">Outros assuntos</option>
+        </select>`;
+
+        data = {
+            room,
+            username: "alobebe",
+            level,
+            message: message_options
+        }
+
+        socket.emit("message", data);
     }else{
         message = `
         Olá ${username}, tudo bem?<br/>
             Fale com um atendente via chat.<br/>
+        
             Esta ferramenta funciona de
         segunda à sexta-feira das 9h às
         17h30.`;
+
+        const data = {
+            room,
+            username: "alobebe",
+            level,
+            message
+        }
+
+        socket.emit("message", data);
     }
-
-    let room = document.getElementById("room").value;
-
-    const data = {
-        room,
-        username: "alobebe",
-        level,
-        message
-    }
-
-    socket.emit("message", data);
 
 }

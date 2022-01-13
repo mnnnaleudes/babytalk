@@ -77,6 +77,9 @@ class RoomController {
 
     }
 
+    /*
+    list room
+     */
     async list(req: Request, res: Response) {
 
         if (!process.env.MONGO_URL) {

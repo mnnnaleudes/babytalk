@@ -45,7 +45,25 @@ routes.put('/support', Support.update);
 routes.get('/support', Support.list);
 
 /*
-end room routes
+end support routes
+ */
+
+/*
+botmessages routes
+
+id_message:
+id_option:
+message:
+order:
+
+ */
+
+routes.put('/botmessage', Support.update);
+
+routes.get('/botmessage', Support.list);
+
+/*
+end botmessages routes
  */
 
 export default routes;

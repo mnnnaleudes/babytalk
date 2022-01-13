@@ -67,11 +67,12 @@ io.on("connection", socket => {
 
         if(messagesRoom.length === 0){
 
-            if(data.supports === 0){
+            if(supports.length === 0){
                 io.emit("support_message", "offline");
             }else{
                 io.emit("support_message", "online");
             }
+
         }
 
         const clients = users.filter(user => user.level === "client");
@@ -81,8 +82,8 @@ io.on("connection", socket => {
         /*
 
         Ocultar mensagem ao voltar ao chat
-        criar um array com os atendentes
         mostrar pop
+        não retorna mensagens do banco
 
          */
 
@@ -122,10 +123,30 @@ io.on("connection", socket => {
 
     });
 
+    socket.on("open_support", (data) => {
+
+        const support: Support = {
+            name: data.name,
+            email: data.email,
+            status: data.status
+        };
+
+        supports.push(support);
+
+    });
+
+    socket.on("answers", (data) => {
+
+
+
+    });
+
 });
 
 function getMessagesRoom(room: string) {
+
     const messagesRoom = messages.filter(message => message.room === room);
 
     return messagesRoom;
+
 }
