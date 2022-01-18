@@ -103,8 +103,6 @@ document.getElementById("input_msg").addEventListener("keypress", (event) => {
 
         let room = document.getElementById("room").value;
 
-        console.log(room);
-
         const data = {
             room,
             username,
@@ -113,6 +111,27 @@ document.getElementById("input_msg").addEventListener("keypress", (event) => {
         }
 
         socket.emit("message", data);
+
+        let box = document.getElementById("box_msg");
+        let message_receives = box.getElementsByClassName("received_msg");
+
+        let box_message = message_receives[message_receives.length-1];
+
+        let message_received = box_message.getElementsByClassName("received_withd_msg")[0];
+
+        let message_received_p = message_received.getElementsByTagName("p")[0];
+
+        let message_received_span = message_received_p.getElementsByTagName("span")[0];
+
+        if(message_received_span !== undefined){
+
+            let subject_msg = message_received_span.dataset.subject;
+            let order_msg = message_received_span.dataset.order;
+
+            callanswer(subject_msg, order_msg);
+
+        }
+
     }
 
 });
@@ -332,28 +351,65 @@ function createInbox(data){
 
 function callanswer(subject,order){
 
-    // request options
-    const options = {
-        method: 'GET',
-        headers: {
-            'Content-Type': 'application/json'
+    let message = "";
+    let room = document.getElementById("room").value;
+
+    //console.log("order",order);
+
+    if(order != 99){
+
+        // request options
+        const options = {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json'
+            }
         }
+
+        // send request
+        fetch('http://localhost:3001/botmessage?id_option='+subject+'&order='+order, options)
+            .then(res => res.text())
+            .then(data => {
+
+                let _message = JSON.parse(data).messages;
+                let next_order = JSON.parse(data).next;
+
+                //console.log("next",next_order);
+
+                const data_send = {
+                    room,
+                    username: "alobebe",
+                    message: "<span data-subject="+subject+" data-order="+next_order+">"+_message[0].message+"</span>"
+                }
+
+                socket.emit("message", data_send);
+
+            })
+            .catch(err => console.error(err));
+
+    }else{
+
+        const data_send = {
+            room,
+            username: "alobebe",
+            message: "Em breve entraremos em contato."
+        }
+
+        socket.emit("message", data_send);
+
+        confirm_close_chat("close");
+
     }
 
-    // send request
-    fetch('http://localhost:3001/botmessage?id_option='+option+'&order='+order, options)
-        .then(res => res.text())
-        .then(data => {
-            let _supports = JSON.parse(data);
-            supports = _supports.length;
-        })
-        .catch(err => console.error(err));
+
+
+
 
 }
 
 function chooseSubject(subject){
 
-    let order = 0;
+    let order = 1;
 
     callanswer(subject,order);
 
@@ -465,6 +521,7 @@ function createChatbot(status){
         socket.emit("message", data);
 
         let message_options = `<select id="botsubject" name="subject" onchange="chooseSubject(this.value)">
+            <option value="0">Selecione</option>
             <option value="1">Conversar sobre um produto</option>
             <option value="2">Conversar sobre uma compra realizada no site</option>
             <option value="3">Lista de chá de bebê</option>

@@ -1,12 +1,15 @@
 import { Router } from 'express';
 import RoomController from "@controllers/RoomController";
 import SupportController from "@controllers/SupportController";
+import BotmessageController from "@controllers/BotmessageController";
 
 const routes = Router();
 
 const Room = new RoomController;
 
 const Support = new SupportController;
+
+const Botmessage = new BotmessageController;
 
 /*
 room routes
@@ -58,9 +61,7 @@ order:
 
  */
 
-routes.put('/botmessage', Support.update);
-
-routes.get('/botmessage', Support.list);
+routes.get('/botmessage', Botmessage.list);
 
 /*
 end botmessages routes

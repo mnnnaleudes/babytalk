@@ -2,6 +2,7 @@ import {Request, Response} from 'express';
 import mongoose from 'mongoose';
 import Botmessage from '@schemas/Botmessage';
 import * as dotenv from 'dotenv';
+import Room from "@schemas/Room";
 
 class BotmessageController {
 
@@ -20,10 +21,15 @@ class BotmessageController {
 
         const query:any = {};
 
+        let countBotmessages_opt = 0;
+        let next_order = 0;
+
         //when get status property
         if(req.query.id_option !== undefined){
 
-            query.option = req.query.id_option;
+            query.id_option = req.query.id_option;
+
+            countBotmessages_opt = await Botmessage.countDocuments(query);
 
         }
 
@@ -32,9 +38,20 @@ class BotmessageController {
 
             query.order = req.query.order;
 
+            query.order = parseInt(query.order);
+
+            if(query.order === countBotmessages_opt){
+                next_order = 99;
+            }else{
+                next_order = query.order + 1;
+            }
+
         }
 
-        const botmessages = await Botmessage.find(query);
+        const botmessages:any = {};
+
+        botmessages["messages"] = await Botmessage.find(query);
+        botmessages["next"] = next_order;
 
         await mongoose.connection.close();
 
@@ -43,3 +60,5 @@ class BotmessageController {
     }
 
 }
+
+export default BotmessageController;

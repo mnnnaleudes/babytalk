@@ -1,5 +1,4 @@
 import mongoose, { Document, Schema } from 'mongoose';
-import Botmessage from "@schemas/Botmessage";
 
 type Babytalk = Document & {};
 
