@@ -1,3 +1,9 @@
+const socket = io();
+
+const urlSearch = new URLSearchParams(window.location.search);
+const username = urlSearch.get("username");
+const email = urlSearch.get("email");
+
 const statusChat = {
     1:"online",
     2:"offline",
@@ -5,7 +11,54 @@ const statusChat = {
     4:"finalizado"
 };
 
+/*
+ *
+ *
+ Criar support
+ *
+ */
+createSuport(username, email, room)
+
+const status = "online";
+
+// create a JSON object
+const json = {
+    name: username,
+    email: email,
+    status: status
+};
+
 // request options
+const options = {
+    method: 'PUT',
+    body: JSON.stringify(json),
+    headers: {
+        'Content-Type': 'application/json'
+    }
+}
+
+// send post request
+fetch('http://localhost:3001/support', options)
+    .then(res => res.text())
+    .then(data => {
+        console.log(data)
+    })
+    .catch(err => console.error(err));
+
+socket.emit("open_support", {
+    username,
+    email,
+    status
+});
+
+
+/*
+ *
+ *
+ get chats and request options
+ *
+ */
+
 const options = {
     method: 'GET',
     headers: {
@@ -28,9 +81,6 @@ fetch('http://localhost:3001/room', options)
 
     })
     .catch(err => console.error(err));
-
-
-const socket = io();
 
 socket.on("newchat", (data) => {
 
@@ -100,7 +150,6 @@ function createChat(data){
                     <button onclick="deny_chat()" class="deny">FECHAR</button>
                 </div>
             </div>`;
-
 
         }
     }
