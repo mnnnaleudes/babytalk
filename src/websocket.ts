@@ -105,9 +105,11 @@ io.on("connection", socket => {
 
     });
 
-    socket.on("close_room",(data) => {
+    socket.on("close_room",(data, callback) => {
 
         socket.leave(data.room);
+
+        callback(messages);
 
     });
 

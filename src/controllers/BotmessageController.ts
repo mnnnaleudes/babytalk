@@ -2,7 +2,6 @@ import {Request, Response} from 'express';
 import mongoose from 'mongoose';
 import Botmessage from '@schemas/Botmessage';
 import * as dotenv from 'dotenv';
-import Room from "@schemas/Room";
 
 class BotmessageController {
 

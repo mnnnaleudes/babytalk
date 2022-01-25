@@ -400,10 +400,6 @@ function callanswer(subject,order){
 
     }
 
-
-
-
-
 }
 
 function chooseSubject(subject){
@@ -455,6 +451,27 @@ function confirm_close_chat(acao){
 
         socket.emit("close_room", {
             room
+        },(messages) => {
+
+
+            // salvando mensagens
+            const options = {
+                method: 'POST',
+                body: JSON.stringify(messages),
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            }
+
+            // send post request
+            fetch('http://localhost:3001/message', options)
+                .then(res => res.text())
+                .then(data => {
+                    //console.log(data)
+                })
+                .catch(err => {
+                    //console.log(err)
+                });
         });
     }else{
 

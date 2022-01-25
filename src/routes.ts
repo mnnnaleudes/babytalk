@@ -2,6 +2,7 @@ import { Router } from 'express';
 import RoomController from "@controllers/RoomController";
 import SupportController from "@controllers/SupportController";
 import BotmessageController from "@controllers/BotmessageController";
+import MessageController from "@controllers/MessageController";
 
 const routes = Router();
 
@@ -10,6 +11,8 @@ const Room = new RoomController;
 const Support = new SupportController;
 
 const Botmessage = new BotmessageController;
+
+const Message = new MessageController;
 
 /*
 room routes
@@ -65,6 +68,20 @@ routes.get('/botmessage', Botmessage.list);
 
 /*
 end botmessages routes
+ */
+
+
+/*
+messages routes
+
+ */
+
+routes.post('/message', Message.store);
+
+routes.get('/message', Message.list);
+
+/*
+end messages routes
  */
 
 export default routes;
