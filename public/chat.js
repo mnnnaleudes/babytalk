@@ -396,7 +396,7 @@ function callanswer(subject,order){
 
         socket.emit("message", data_send);
 
-        confirm_close_chat("close");
+        confirm_close_chat("close",2);
 
     }
 
@@ -410,7 +410,7 @@ function chooseSubject(subject){
 
 }
 
-function confirm_close_chat(acao){
+function confirm_close_chat(acao,status){
 
     if (acao === "close"){
 
@@ -419,7 +419,7 @@ function confirm_close_chat(acao){
         // create a JSON object
         const json = {
             id: room,
-            status: 4
+            status: status
         };
 
         // request options
@@ -493,8 +493,8 @@ document.getElementById("close_chat").addEventListener("click", (event) => {
     document.getElementById("send_btn").style.visibility="hidden";
 
     const message = `Deseja realmente finalizar o atendimento?
-        <span onclick="confirm_close_chat('close')" class='confirm_close_chat'>Sim</span> |
-        <span onclick="confirm_close_chat('back')" class='confirm_close_chat'>Voltar</span>`;
+        <span onclick="confirm_close_chat('close',4)" class='confirm_close_chat'>Sim</span> |
+        <span onclick="confirm_close_chat('back',3)" class='confirm_close_chat'>Voltar</span>`;
 
     let room = document.getElementById("room").value;
 

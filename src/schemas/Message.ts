@@ -13,12 +13,12 @@ export const MessageSchema = new mongoose.Schema(
             required: true
         },
         text: {
-            type: Number,
+            type: String,
             required: true
         },
         level: {
             type: String,
-            required: true
+            required: false
         }
     },
     {
