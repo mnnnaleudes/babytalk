@@ -1,5 +1,4 @@
 const socket = io();
-
 const urlSearch = new URLSearchParams(window.location.search);
 const username = urlSearch.get("username");
 let room = urlSearch.get("select_room");
