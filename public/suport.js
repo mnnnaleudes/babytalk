@@ -17,7 +17,7 @@ const statusChat = {
  Criar support
  *
  */
-createSuport(username, email, room)
+//createSuport(username, email, room)
 
 const status = "online";
 
@@ -29,7 +29,7 @@ const json = {
 };
 
 // request options
-const options = {
+const options_support = {
     method: 'PUT',
     body: JSON.stringify(json),
     headers: {
@@ -38,7 +38,7 @@ const options = {
 }
 
 // send post request
-fetch('http://localhost:3001/support', options)
+fetch('http://localhost:3001/support', options_support)
     .then(res => res.text())
     .then(data => {
         console.log(data)
@@ -51,6 +51,7 @@ socket.emit("open_support", {
     status
 });
 
+console.log("Blah");
 
 /*
  *
