@@ -1,9 +1,9 @@
 const socket = io();
 const urlSearch = new URLSearchParams(window.location.search);
-const username = urlSearch.get("username");
+const username = (urlSearch.get("username")!== undefined)?urlSearch.get("username"):"anonimo";
 let room = urlSearch.get("select_room");
 const level = urlSearch.get("level");
-const email = urlSearch.get("email");
+const email = (urlSearch.get("email")!== undefined)?urlSearch.get("email"):"anonimo@alobebe.com";
 const assunto = urlSearch.get("assunto");
 
 /*
